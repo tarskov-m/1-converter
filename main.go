@@ -95,18 +95,21 @@ func userInputAmount() float64 {
 }
 
 func calculate(amount float64, currency1 string, currency2 string) {
-	if currency1 == "USD" && currency2 == "EUR" {
-		fmt.Printf("%.2f USD = %.2f EUR\n", amount, amount*UsdToEur)
-	} else if currency1 == "USD" && currency2 == "RUB" {
-		fmt.Printf("%.2f USD = %.2f RUB\n", amount, amount*UsdToRub)
-	} else if currency1 == "EUR" && currency2 == "USD" {
-		fmt.Printf("%.2f EUR = %.2f USD\n", amount, amount/UsdToEur)
-	} else if currency1 == "EUR" && currency2 == "RUB" {
-		fmt.Printf("%.2f EUR = %.2f RUB\n", amount, amount*EurToRub)
-	} else if currency1 == "RUB" && currency2 == "USD" {
-		fmt.Printf("%.2f RUB = %.2f USD\n", amount, amount/UsdToRub)
-	} else if currency1 == "RUB" && currency2 == "EUR" {
-		fmt.Printf("%.2f RUB = %.2f EUR\n", amount, amount/EurToRub)
+	exchangeRates := map[string]float64{
+		"USD-EUR": UsdToEur,
+		"USD-RUB": UsdToRub,
+		"EUR-RUB": EurToRub,
+		"EUR-USD": 1 / UsdToEur,
+		"RUB-USD": 1 / UsdToRub,
+		"RUB-EUR": 1 / EurToRub,
+	}
+
+	key := currency1 + "-" + currency2
+
+	if rate, ok := exchangeRates[key]; ok {
+		fmt.Printf("Результат: %.2f %s\n", amount*rate, currency2)
+	} else {
+		fmt.Println("Неизвестная валюта")
 	}
 }
 
