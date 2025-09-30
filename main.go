@@ -40,111 +40,38 @@ func main() {
 
 func userInputCurrency(currency string) string {
 	var number int
-	var value string
+
+	validConversion := map[string][]string{
+		"":    {"USD", "EUR", "RUB"},
+		"USD": {"EUR", "RUB"},
+		"EUR": {"USD", "RUB"},
+		"RUB": {"USD", "EUR"},
+	}
+
+	options := validConversion[currency]
+	options = append(options, "Выход")
 
 	for {
-		if currency == "" {
-			fmt.Println("Введите валюту:")
-			fmt.Println("1. USD")
-			fmt.Println("2. EUR")
-			fmt.Println("3. RUB")
-			fmt.Println("4. Выход")
-			_, err := fmt.Scanln(&number)
-			if err != nil {
-				fmt.Println("Введите корректное значение")
-				continue
-			}
-			if number == 4 {
-				return value
-			} else if number > 4 {
-				fmt.Println("Введите корректное значение")
-				continue
-			} else {
-				switch number {
-				case 1:
-					value = "USD"
-				case 2:
-					value = "EUR"
-				case 3:
-					value = "RUB"
-				}
-				return value
-			}
-		} else {
-			if currency == "USD" {
-				fmt.Println("Введите валюту:")
-				fmt.Println("1. EUR")
-				fmt.Println("2. RUB")
-				fmt.Println("3. Выход")
-				_, err := fmt.Scanln(&number)
-				if err != nil {
-					fmt.Println("Введите корректное значение")
-					continue
-				}
-				if number == 3 {
-					return value
-				} else if number > 3 {
-					fmt.Println("Введите корректное значение")
-					continue
-				} else {
-					switch number {
-					case 1:
-						value = "EUR"
-					case 2:
-						value = "RUB"
-					}
-					return value
-				}
-			} else if currency == "EUR" {
-				fmt.Println("Введите валюту:")
-				fmt.Println("1. USD")
-				fmt.Println("2. RUB")
-				fmt.Println("3. Выход")
-				_, err := fmt.Scanln(&number)
-				if err != nil {
-					fmt.Println("Введите корректное значение")
-					continue
-				}
-				if number == 3 {
-					return value
-				} else if number > 3 {
-					fmt.Println("Введите корректное значение")
-					continue
-				} else {
-					switch number {
-					case 1:
-						value = "USD"
-					case 2:
-						value = "RUB"
-					}
-					return value
-				}
-			} else if currency == "RUB" {
-				fmt.Println("Введите валюту:")
-				fmt.Println("1. USD")
-				fmt.Println("2. EUR")
-				fmt.Println("3. Выход")
-				_, err := fmt.Scanln(&number)
-				if err != nil {
-					fmt.Println("Введите корректное значение")
-					continue
-				}
-				if number == 3 {
-					return value
-				} else if number > 3 {
-					fmt.Println("Введите корректное значение")
-					continue
-				} else {
-					switch number {
-					case 1:
-						value = "USD"
-					case 2:
-						value = "EUR"
-					}
-					return value
-				}
-			}
+		fmt.Println("Введите валюту:")
+		for i, option := range options {
+			fmt.Printf("%d. %s\n", i+1, option)
 		}
+
+		if _, err := fmt.Scanln(&number); err != nil {
+			fmt.Println("Введите корректное значение")
+			continue
+		}
+
+		if number > len(options) || number < 1 {
+			fmt.Println("Введите корректное значение")
+			continue
+		}
+
+		if number == len(options) {
+			return ""
+		}
+
+		return options[number-1]
 	}
 }
 
@@ -194,20 +121,11 @@ func stopProgram() bool {
 		if err != nil {
 			fmt.Println("Введите корректное значение")
 			continue
-		} else if number == 0 || number > 2 {
-			if number == 0 {
-				fmt.Println("Введите значение больше 0")
-				continue
-			} else {
-				fmt.Println("Введите значение меньше 3")
-				continue
-			}
+		} else if number < 1 || number > 2 {
+			fmt.Println("Введите значение от 1 до 2")
+			continue
 		} else {
-			if number == 1 {
-				return true
-			} else if number == 2 {
-				return false
-			}
+			return number == 1
 		}
 	}
 }
